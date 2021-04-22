@@ -30,7 +30,6 @@ package sc.iview.commands.demo.animation
 
 import graphics.scenery.BoundingGrid
 import graphics.scenery.volumes.Volume
-import ij.gui.GenericDialog
 import net.imglib2.IterableInterval
 import net.imglib2.RandomAccess
 import net.imglib2.RandomAccessibleInterval
@@ -39,10 +38,14 @@ import net.imglib2.img.Img
 import net.imglib2.img.array.ArrayImgs
 import net.imglib2.type.numeric.integer.UnsignedByteType
 import org.joml.Vector3f
+import org.scijava.Context
 import org.scijava.command.Command
 import org.scijava.command.CommandInfo
 import org.scijava.command.CommandService
+import org.scijava.command.Inputs
 import org.scijava.event.EventHandler
+import org.scijava.module.DefaultMutableModuleItem
+import org.scijava.module.ModuleItem
 import org.scijava.plugin.Menu
 import org.scijava.plugin.Parameter
 import org.scijava.plugin.Plugin
@@ -71,6 +74,9 @@ class GameOfLife3D : Command {
 
     @Parameter
     private lateinit var commandService: CommandService
+
+    @Parameter
+    private lateinit var context: Context
 
     @Parameter(label = "Starvation threshold", min = "0", max = "26", persist = false, style = "group:Game of Life")
     private var starvation = 5
@@ -122,7 +128,6 @@ class GameOfLife3D : Command {
 
     /** Temporary buffer for use while recomputing the image.  */
     private val bits = BooleanArray(w * h * d)
-    private var dialog: GenericDialog? = null
 
     /** Repeatedly iterates the simulation until stopped  */
     fun play() {
@@ -205,17 +210,20 @@ class GameOfLife3D : Command {
 
     override fun run() {
         randomize()
-        dialog = GenericDialog("Game of Life 3D")
-        dialog!!.addNumericField("Starvation threshold", starvation.toDouble(), 0)
-        dialog!!.addNumericField("Birth threshold", birth.toDouble(), 0)
-        dialog!!.addNumericField("Suffocation threshold", suffocation.toDouble(), 0)
-        dialog!!.addNumericField("Initial saturation % when randomizing", saturation.toDouble(), 0)
-        dialog!!.showDialog()
-        if (dialog!!.wasCanceled()) return
-        starvation = dialog!!.nextNumber.toInt()
-        birth = dialog!!.nextNumber.toInt()
-        suffocation = dialog!!.nextNumber.toInt()
-        saturation = dialog!!.nextNumber.toInt()
+        val dialog = Inputs(context)
+        val starvationName = "Starvation threshold"
+        val birthName = "Birth threshold"
+        val suffocationName = "Suffocation threshold"
+        val saturationName = "Initial saturation % when randomizing"
+        dialog.addInput(createInput(dialog, starvationName, starvation))
+        dialog.addInput(createInput(dialog, birthName, birth))
+        dialog.addInput(createInput(dialog, suffocationName, suffocation))
+        dialog.addInput(createInput(dialog, saturationName, saturation))
+        dialog.harvest()
+        starvation = dialog.getInput(starvationName) as Int
+        birth = dialog.getInput(birthName) as Int
+        suffocation = dialog.getInput(suffocationName) as Int
+        saturation = dialog.getInput(saturationName) as Int
         randomize()
         play()
 
@@ -235,6 +243,12 @@ class GameOfLife3D : Command {
         //play();
 
         //eventService.subscribe(this);
+    }
+
+    private fun createInput(inputs: Inputs, name: String, initialValue: Int): ModuleItem<*> {
+        val res = DefaultMutableModuleItem(inputs, name, Int::class.java)
+        res.setValue(inputs, initialValue)
+        return res
     }
 
     // -- Helper methods --
