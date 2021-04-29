@@ -11,7 +11,7 @@
 
 	<groupId>sc.iview</groupId>
 	<artifactId>sciview</artifactId>
-	<version>987</version>
+	<version>972</version>
 
 	<name>SciView</name>
 	<description>Scenery-backed 3D visualization package for ImageJ.</description>

@@ -26,7 +26,7 @@ repositories {
 
 val sceneryVersion = "4a0c1f7"
 // here we set some versions
-//"scijava-common"("2.84.0")
+"scijava-common"("2.85.0")
 "ui-behaviour"("2.0.3")
 "imagej-mesh"("0.8.1")
 "bigdataviewer-vistools"("1.0.0-beta-21")
@@ -56,8 +56,8 @@ dependencies {
 
     sciJava("org.scijava"["scijava-common", "ui-behaviour", "script-editor", "scijava-ui-swing",
             "scijava-ui-awt", "scijava-search", "scripting-jython"])
-    implementation("org.scijava:scijava-common:2.83.0") {
-        version { strictly("2.83.3") }
+    implementation("org.scijava:scijava-common:2.85.0") {
+        version { strictly("2.85.0") }
     }
     sciJava("com.miglayout:miglayout-swing")
 
@@ -117,7 +117,7 @@ dependencies {
     testImplementation(kotlin("test-junit"))
 
     sciJava("sc.fiji"["bigdataviewer-core", "bigdataviewer-vistools"])
-    implementation("com.github.skalarproduktraum:jogl-minimal:1c86442")
+    implementation("sc.fiji.bigvolumeviewer:0.2.0")
 
     // this apparently is still necessary
     implementation(platform("org.lwjgl:lwjgl-bom:3.2.3"))

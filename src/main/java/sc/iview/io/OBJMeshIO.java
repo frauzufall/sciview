@@ -44,7 +44,7 @@ public class OBJMeshIO extends AbstractIOPlugin<graphics.scenery.Mesh> {
     @Override
     public graphics.scenery.Mesh open( final String source ) {
         final graphics.scenery.Mesh mesh = new graphics.scenery.Mesh();
-        mesh.readFromOBJ( source, false );
+        mesh.readFromOBJ( source, true );
         return mesh;
     }
 

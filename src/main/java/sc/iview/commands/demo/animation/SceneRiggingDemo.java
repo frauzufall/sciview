@@ -29,12 +29,9 @@
 package sc.iview.commands.demo.animation;
 
 import graphics.scenery.*;
-import ij.gui.GenericDialog;
-import ij.gui.NonBlockingGenericDialog;
 import net.imagej.mesh.Mesh;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.Img;
-import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.type.numeric.ARGBType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
 import org.joml.Vector3f;
@@ -143,17 +140,17 @@ public class SceneRiggingDemo implements Command {
     }
 
     private void makeDialog() {
-        GenericDialog dialog = new NonBlockingGenericDialog("Run scene");
-        dialog.showDialog();
-        while( dialog.isVisible() ) {
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if( dialog.wasCanceled() )
-            return;
+//        GenericDialog dialog = new NonBlockingGenericDialog("Run scene");
+//        dialog.showDialog();
+//        while( dialog.isVisible() ) {
+//            try {
+//                Thread.sleep(20);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if( dialog.wasCanceled() )
+//            return;
 
         Camera prevCamera = sciView.getActiveObserver();
         sciView.setCamera(screenshotCam);
@@ -169,7 +166,7 @@ public class SceneRiggingDemo implements Command {
         }
 
         RandomAccessibleInterval<ARGBType> colorScreenshot = convertToARGB(screenshot);
-        ImageJFunctions.show(colorScreenshot);
+//        ImageJFunctions.show(colorScreenshot);
 
         sciView.setCamera( prevCamera );
 
